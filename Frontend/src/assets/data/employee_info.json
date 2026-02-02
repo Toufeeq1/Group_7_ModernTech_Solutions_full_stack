@@ -1,0 +1,104 @@
+{
+  "employeeInformation": [
+    {
+      "employeeId": 1,
+      "name": "Sibongile Nkosi",
+      "position": "Software Engineer",
+      "department": "Development",
+      "salary": 70000,
+      "employmentHistory": "Joined in 2015, promoted to Senior in 2018",
+      "contact": "sibongile.nkosi@moderntech.com",
+       "image": "https://media.licdn.com/dms/image/v2/D4D03AQFVSjlhrrBNEQ/profile-displayphoto-scale_200_200/B4DZqiCHCiGQAY-/0/1763655055368?e=2147483647&v=beta&t=J8bJm8khVytFugviAfEtY6jaGMcUlikc5IwcUc44MVw"          
+    },
+    {
+      "employeeId": 2,
+      "name": "Lungile Moyo",
+      "position": "HR Manager",
+      "department": "HR",
+      "salary": 80000,
+      "employmentHistory": "Joined in 2013, promoted to Manager in 2017",
+      "contact": "lungile.moyo@moderntech.com",
+      "image":"https://pbs.twimg.com/profile_images/849644290150080513/efSTNeOL_400x400.jpg" 
+    },
+    {
+      "employeeId": 3,
+      "name": "Thabo Molefe",
+      "position": "Quality Analyst",
+      "department": "QA",
+      "salary": 55000,
+      "employmentHistory": "Joined in 2018",
+      "contact": "thabo.molefe@moderntech.com",
+      "image": "https://www.jonathanball.co.za/wp-content/uploads/2024/08/Thabo-A.-Molefe.jpg  "
+    },
+    {
+      "employeeId": 4,
+      "name": "Keshav Naidoo",
+      "position": "Sales Representative",
+      "department": "Sales",
+      "salary": 60000,
+      "employmentHistory": "Joined in 2020",
+      "contact": "keshav.naidoo@moderntech.com",
+      "image": "https://media.licdn.com/dms/image/v2/D5603AQE5EO1ydQKazw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1729370044760?e=2147483647&v=beta&t=_bjR9lw_s55QRYCUP65K6HLhQOg02_-capRNtv4tGQ8 "
+    },
+    {
+      "employeeId": 5,
+      "name": "Zanele Khumalo",
+      "position": "Marketing Specialist",
+      "department": "Marketing",
+      "salary": 58000,
+      "employmentHistory": "Joined in 2019",
+      "contact": "zanele.khumalo@moderntech.com",
+      "image": "https://media.licdn.com/dms/image/v2/D4E03AQFXkeIydEX-tA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1707416223825?e=2147483647&v=beta&t=JQx2HLW0iEe95j_W9ptEZUE-diepC_O8cYlWa3ACmZM "
+    },
+    {
+      "employeeId": 6,
+      "name": "Sipho Zulu",
+      "position": "UI/UX Designer",
+      "department": "Design",
+      "salary": 65000,
+      "employmentHistory": "Joined in 2016",
+      "contact": "sipho.zulu@moderntech.com",
+      "image": "https://media.licdn.com/dms/image/v2/D4D03AQFNpYcMygkT9A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1704435500320?e=2147483647&v=beta&t=OdhVyJaJZbOu46H05nkt-V9HL_P0E5PrM0pHCkWB9Cc "
+    },
+    {
+      "employeeId": 7,
+      "name": "Naledi Moeketsi",
+      "position": "DevOps Engineer",
+      "department": "IT",
+      "salary": 72000,
+      "employmentHistory": "Joined in 2017",
+      "contact": "naledi.moeketsi@moderntech.com",
+      "image": "https://media.licdn.com/dms/image/v2/D4D22AQGaJBfdYpQ21w/feedshare-shrink_800/B4DZqsH3AwIkAg-/0/1763824359626?e=2147483647&v=beta&t=G-xg0ZfRzOcywYcSt6v3S5VgJyvXrWmGM0WGZQamGfw "
+    },
+    {
+      "employeeId": 8,
+      "name": "Farai Gumbo",
+      "position": "Content Strategist",
+      "department": "Marketing",
+      "salary": 56000,
+      "employmentHistory": "Joined in 2021",
+      "contact": "farai.gumbo@moderntech.com",
+      "image": "https://media.licdn.com/dms/image/v2/D4D22AQE4104X7u-nAQ/feedshare-shrink_800/feedshare-shrink_800/0/1718553864102?e=2147483647&v=beta&t=PK47n1VSj1XrWqRDd05VzerWRVDMctg_9LTnBk6VN1M"
+    },
+    {
+      "employeeId": 9,
+      "name": "Karabo Dlamini",
+      "position": "Accountant",
+      "department": "Finance",
+      "salary": 62000,
+      "employmentHistory": "Joined in 2018",
+      "contact": "karabo.dlamini@moderntech.com",
+      "image": "https://serve.mg.co.za/uploads/2009/08/03/karabonondumo.jpg "
+    },
+    {
+      "employeeId": 10,
+      "name": "Fatima Patel",
+      "position": "Customer Support Lead",
+      "department": "Support",
+      "salary": 58000,
+      "employmentHistory": "Joined in 2016",
+      "contact": "fatima.patel@moderntech.com",
+      "image": "https://media.licdn.com/dms/image/v2/C4D03AQFtsimcLEgLWA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1660722868353?e=2147483647&v=beta&t=f_j86R7mTo1bZmAH1D1bJUm6E97LMRO39C2fy6V6inM "
+    }
+  ]
+}
