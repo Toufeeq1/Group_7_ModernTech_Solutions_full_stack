@@ -1,17 +1,34 @@
-import { createStore } from 'vuex';
-import employeeData from '@/assets/data/employee_info.json';
-import attendanceData from '@/assets/data/attendance.json';
-import payrollData from '@/assets/data/payroll_data.json';
+import { createStore } from 'vuex'
+import employeeData from '@/assets/data/employee_info.json'
+import attendanceData from '@/assets/data/attendance.json'
+import payrollData from '@/assets/data/payroll_data.json'
+import axios from 'axios'
 
 const store = createStore({
-    state:{
+  state: {
     employees: employeeData.employeeInformation,
     attendance: attendanceData.attendanceAndLeave,
     payroll: payrollData.payrollData,
-    },
-    mutations:{
-    },
-    actions:{
+    employeesnew: null
+  },
+
+  mutations: {
+    setEmployees(state, payload) {
+      state.employeesnew = payload
     }
-});
+  },
+
+  actions: {
+    async setEmployees({ commit }) {
+      try {
+        const res = await axios.get('http://localhost:5050/employees')
+        console.log(res.data.info)
+        commit('setEmployees', res.data.info)
+      } catch (error) {
+        console.error('Failed to fetch employees:', error)
+      }
+    }
+  }
+})
+
 export default store
