@@ -58,6 +58,7 @@ CREATE TABLE `employees` (
   `salary` decimal(10,2) NOT NULL,
   `employmentHistory` longtext NOT NULL,
   `contact` varchar(55) DEFAULT NULL,
+  `image` varchar(800) NOT NULL,
   PRIMARY KEY (`employee_Id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   UNIQUE KEY `contact_UNIQUE` (`contact`)
@@ -70,7 +71,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,'Sibongile Nkosi','Software Engineer','Development',70000.00,'Joined in 2015, promoted to Senior in 2018','sibongile.nkosi@moderntech.com'),(2,'Lungile Moyo','HR Manager','HR',80000.00,'Joined in 2013, promoted to Manager in 2017','lungile.moyo@moderntech.com'),(3,'Thabo Molefe','Quality Analyst','QA',55000.00,'Joined in 2018','thabo.molefe@moderntech.com'),(4,'Keshav Naidoo','Sales Representative','Sales',60000.00,'Joined in 2020','keshav.naidoo@moderntech.com'),(5,'Zanele Khumalo','Marketing Specialist','Marketing',0.00,'Joined in 2019','zanele.khumalo@moderntech.com'),(6,'Sipho Zulu','UI/UX Designer','Design',0.00,'Joined in 2016','sipho.zulu@moderntech.com'),(7,'Naledi Moeketsi','DevOps Engineer','IT',0.00,'Joined in 2017','naledi.moeketsi@moderntech.com'),(8,'Farai Gumbo','Content Strategist','Marketing',0.00,'Joined in 2021','farai.gumbo@moderntech.com'),(9,'Karabo Dlamini','Accountant','Finance',0.00,'Joined in 2018','karabo.dlamini@moderntech.com'),(10,'Fatima Patel','Customer Support Lead','Support',0.00,'Joined in 2016','fatima.patel@moderntech.com');
+INSERT INTO `employees` VALUES (1,'Sibongile Nkosi','Software Engineer','Development',70000.00,'Joined in 2015, promoted to Senior in 2018','sibongile.nkosi@moderntech.com','https://media.licdn.com/dms/image/v2/D4D03AQFVSjlhrrBNEQ/profile-displayphoto-scale_200_200/B4DZqiCHCiGQAY-/0/1763655055368?e=2147483647&v=beta&t=J8bJm8khVytFugviAfEtY6jaGMcUlikc5IwcUc44MVw'),(2,'Lungile Moyo','HR Manager','HR',80000.00,'Joined in 2013, promoted to Manager in 2017','lungile.moyo@moderntech.com','https://pbs.twimg.com/profile_images/849644290150080513/efSTNeOL_400x400.jpg'),(3,'Thabo Molefe','Quality Analyst','QA',55000.00,'Joined in 2018','thabo.molefe@moderntech.com','https://www.jonathanball.co.za/wp-content/uploads/2024/08/Thabo-A.-Molefe.jpg'),(4,'Keshav Naidoo','Sales Representative','Sales',60000.00,'Joined in 2020','keshav.naidoo@moderntech.com','https://media.licdn.com/dms/image/v2/D5603AQE5EO1ydQKazw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1729370044760?e=2147483647&v=beta&t=_bjR9lw_s55QRYCUP65K6HLhQOg02_-capRNtv4tGQ8'),(5,'Zanele Khumalo','Marketing Specialist','Marketing',0.00,'Joined in 2019','zanele.khumalo@moderntech.com','https://media.licdn.com/dms/image/v2/D4E03AQFXkeIydEX-tA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1707416223825?e=2147483647&v=beta&t=JQx2HLW0iEe95j_W9ptEZUE-diepC_O8cYlWa3ACmZM'),(6,'Sipho Zulu','UI/UX Designer','Design',0.00,'Joined in 2016','sipho.zulu@moderntech.com','https://media.licdn.com/dms/image/v2/D4D03AQFNpYcMygkT9A/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1704435500320?e=2147483647&v=beta&t=OdhVyJaJZbOu46H05nkt-V9HL_P0E5PrM0pHCkWB9Cc'),(7,'Naledi Moeketsi','DevOps Engineer','IT',0.00,'Joined in 2017','naledi.moeketsi@moderntech.com','https://media.licdn.com/dms/image/v2/D4D22AQGaJBfdYpQ21w/feedshare-shrink_800/B4DZqsH3AwIkAg-/0/1763824359626?e=2147483647&v=beta&t=G-xg0ZfRzOcywYcSt6v3S5VgJyvXrWmGM0WGZQamGfw'),(8,'Farai Gumbo','Content Strategist','Marketing',0.00,'Joined in 2021','farai.gumbo@moderntech.com','https://media.licdn.com/dms/image/v2/D4D22AQE4104X7u-nAQ/feedshare-shrink_800/feedshare-shrink_800/0/1718553864102?e=2147483647&v=beta&t=PK47n1VSj1XrWqRDd05VzerWRVDMctg_9LTnBk6VN1M'),(9,'Karabo Dlamini','Accountant','Finance',0.00,'Joined in 2018','karabo.dlamini@moderntech.com','https://serve.mg.co.za/uploads/2009/08/03/karabonondumo.jpg'),(10,'Fatima Patel','Customer Support Lead','Support',0.00,'Joined in 2016','fatima.patel@moderntech.com','https://media.licdn.com/dms/image/v2/C4D03AQFtsimcLEgLWA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1660722868353?e=2147483647&v=beta&t=f_j86R7mTo1bZmAH1D1bJUm6E97LMRO39C2fy6V6inM');
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,4 +143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-04 11:44:03
+-- Dump completed on 2026-02-04 12:18:57
