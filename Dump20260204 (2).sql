@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: employee_data
+-- Host: localhost    Database: employee_data
 -- ------------------------------------------------------
 -- Server version	8.0.44
 
@@ -29,7 +29,7 @@ CREATE TABLE `attendance` (
   `status` varchar(45) NOT NULL,
   PRIMARY KEY (`attendance_Id`),
   KEY `employee_Id_idx` (`employee_Id`),
-  CONSTRAINT `employee_Id` FOREIGN KEY (`employee_Id`) REFERENCES `employees` (`employee_Id`)
+  CONSTRAINT `employee_Id` FOREIGN KEY (`employee_Id`) REFERENCES `employees` (`employee_Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -44,36 +44,6 @@ INSERT INTO `attendance` VALUES (1,1,'2025-07-25','Present'),(2,1,'2025-07-26','
 UNLOCK TABLES;
 
 --
--- Table structure for table `employee_info`
---
-
-DROP TABLE IF EXISTS `employee_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employee_info` (
-  `employee_info_Id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(145) NOT NULL,
-  `position` varchar(145) NOT NULL,
-  `department` varchar(65) NOT NULL,
-  `salary` decimal(10,2) NOT NULL,
-  `employmentHistory` longtext NOT NULL,
-  `contact` varchar(55) DEFAULT NULL,
-  PRIMARY KEY (`employee_info_Id`),
-  UNIQUE KEY `contact_UNIQUE` (`contact`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `employee_info`
---
-
-LOCK TABLES `employee_info` WRITE;
-/*!40000 ALTER TABLE `employee_info` DISABLE KEYS */;
-INSERT INTO `employee_info` VALUES (1,'Sibongile Nkosi','Software Engineer','Development',70000.00,'Joined in 2015, promoted to Senior in 2018','sibongile.nkosi@moderntech.com'),(2,'Lungile Moyo','HR Manager','HR',80000.00,'Joined in 2013, promoted to Manager in 2017','lungile.moyo@moderntech.com'),(3,'Thabo Molefe','Quality Analyst','QA',5000.00,'Joined in 2018','thabo.molefe@moderntech.com'),(4,'Keshav Naidoo','Sales Representative','Sales',60000.00,'Joined in 2020','keshav.naidoo@moderntech.com'),(5,'Zanele Khumalo','Marketing Specialist','Marketing',58000.00,'Joined in 2019','zanele.khumalo@moderntech.com'),(6,'Sipho Zulu','UI/UX Designer','Design',65000.00,'Joined in 2016','sipho.zulu@moderntech.com'),(7,'Naledi Moeketsi','DevOps Engineer','IT',72000.00,'Joined in 2017','naledi.moeketsi@moderntech.com'),(8,'Farai Gumbo','Content Strategist','Marketing',56000.00,'Joined in 2021','farai.gumbo@moderntech.com'),(9,'Karabo Dlamini','Accountant','Finance',62000.00,'Joined in 2018','karabo.dlamini@moderntech.com'),(10,'Fatima Patel','Customer Support Lead','Support',58000.00,'Joined in 2016','fatima.patel@moderntech.com');
-/*!40000 ALTER TABLE `employee_info` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `employees`
 --
 
@@ -83,7 +53,14 @@ DROP TABLE IF EXISTS `employees`;
 CREATE TABLE `employees` (
   `employee_Id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(70) NOT NULL,
-  PRIMARY KEY (`employee_Id`)
+  `position` varchar(145) NOT NULL,
+  `department` varchar(65) NOT NULL,
+  `salary` decimal(10,2) NOT NULL,
+  `employmentHistory` longtext NOT NULL,
+  `contact` varchar(55) DEFAULT NULL,
+  PRIMARY KEY (`employee_Id`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  UNIQUE KEY `contact_UNIQUE` (`contact`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -93,7 +70,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,'Sibongile Nkosi'),(2,'Lungile Moyo'),(3,'Thabo Molefe'),(4,'Keshav Naidoo'),(5,'Zanele Khumalo'),(6,'Sipho Zulu'),(7,'Naledi Moeketsi'),(8,'Farai Gumbo'),(9,'Karabo Dlamini'),(10,'Fatima Patel');
+INSERT INTO `employees` VALUES (1,'Sibongile Nkosi','Software Engineer','Development',70000.00,'Joined in 2015, promoted to Senior in 2018','sibongile.nkosi@moderntech.com'),(2,'Lungile Moyo','HR Manager','HR',80000.00,'Joined in 2013, promoted to Manager in 2017','lungile.moyo@moderntech.com'),(3,'Thabo Molefe','Quality Analyst','QA',55000.00,'Joined in 2018','thabo.molefe@moderntech.com'),(4,'Keshav Naidoo','Sales Representative','Sales',60000.00,'Joined in 2020','keshav.naidoo@moderntech.com'),(5,'Zanele Khumalo','Marketing Specialist','Marketing',0.00,'Joined in 2019','zanele.khumalo@moderntech.com'),(6,'Sipho Zulu','UI/UX Designer','Design',0.00,'Joined in 2016','sipho.zulu@moderntech.com'),(7,'Naledi Moeketsi','DevOps Engineer','IT',0.00,'Joined in 2017','naledi.moeketsi@moderntech.com'),(8,'Farai Gumbo','Content Strategist','Marketing',0.00,'Joined in 2021','farai.gumbo@moderntech.com'),(9,'Karabo Dlamini','Accountant','Finance',0.00,'Joined in 2018','karabo.dlamini@moderntech.com'),(10,'Fatima Patel','Customer Support Lead','Support',0.00,'Joined in 2016','fatima.patel@moderntech.com');
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +90,7 @@ CREATE TABLE `leave_request` (
   PRIMARY KEY (`leave_Id`),
   KEY `employee_Id_idx` (`id_leave_request_employee`),
   KEY `id_leave_request_employee_idx` (`id_leave_request_employee`),
-  CONSTRAINT `id_leave_request_employee` FOREIGN KEY (`id_leave_request_employee`) REFERENCES `employees` (`employee_Id`)
+  CONSTRAINT `id_leave_request_employee` FOREIGN KEY (`id_leave_request_employee`) REFERENCES `employees` (`employee_Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -135,11 +112,14 @@ DROP TABLE IF EXISTS `payroll_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payroll_data` (
-  `employee_Id` int NOT NULL AUTO_INCREMENT,
+  `payroll_Id` int NOT NULL AUTO_INCREMENT,
+  `employee_Id` int NOT NULL,
   `hoursWorked` int NOT NULL,
   `leaveDeductions` int NOT NULL,
-  `finalSalary` decimal(12,5) NOT NULL,
-  PRIMARY KEY (`employee_Id`)
+  `finalSalary` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`payroll_Id`),
+  KEY `fk_payroll_employee` (`employee_Id`),
+  CONSTRAINT `fk_payroll_employee` FOREIGN KEY (`employee_Id`) REFERENCES `employees` (`employee_Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -149,7 +129,7 @@ CREATE TABLE `payroll_data` (
 
 LOCK TABLES `payroll_data` WRITE;
 /*!40000 ALTER TABLE `payroll_data` DISABLE KEYS */;
-INSERT INTO `payroll_data` VALUES (1,169,8,69500.00000),(2,150,10,79000.00000),(3,170,4,54800.00000),(4,165,6,59700.00000),(5,158,5,57850.00000),(6,168,2,64800.00000),(7,175,3,71800.00000),(8,160,0,5600.00000),(9,155,5,61500.00000),(10,162,4,57750.00000);
+INSERT INTO `payroll_data` VALUES (1,1,169,8,69500.00),(2,2,150,10,79000.00),(3,3,170,4,54800.00),(4,4,165,6,59700.00),(5,5,158,5,57850.00),(6,6,168,2,64800.00),(7,7,175,3,71800.00),(8,8,160,0,5600.00),(9,9,155,5,61500.00),(10,10,162,4,57750.00);
 /*!40000 ALTER TABLE `payroll_data` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -162,4 +142,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-03 10:42:28
+-- Dump completed on 2026-02-04 11:44:03
