@@ -29,7 +29,7 @@ CREATE TABLE `attendance` (
   `status` varchar(45) NOT NULL,
   PRIMARY KEY (`attendance_Id`),
   KEY `employee_Id_idx` (`employee_Id`),
-  CONSTRAINT `employee_Id` FOREIGN KEY (`employee_Id`) REFERENCES `employees` (`employee_Id`)
+  CONSTRAINT `employee_Id` FOREIGN KEY (`employee_Id`) REFERENCES `employees` (`employee_Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -90,7 +90,7 @@ CREATE TABLE `leave_request` (
   PRIMARY KEY (`leave_Id`),
   KEY `employee_Id_idx` (`id_leave_request_employee`),
   KEY `id_leave_request_employee_idx` (`id_leave_request_employee`),
-  CONSTRAINT `id_leave_request_employee` FOREIGN KEY (`id_leave_request_employee`) REFERENCES `employees` (`employee_Id`)
+  CONSTRAINT `id_leave_request_employee` FOREIGN KEY (`id_leave_request_employee`) REFERENCES `employees` (`employee_Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -112,12 +112,14 @@ DROP TABLE IF EXISTS `payroll_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payroll_data` (
-  `employee_Id` int NOT NULL AUTO_INCREMENT,
+  `payroll_Id` int NOT NULL AUTO_INCREMENT,
+  `employee_Id` int NOT NULL,
   `hoursWorked` int NOT NULL,
   `leaveDeductions` int NOT NULL,
   `finalSalary` decimal(12,2) NOT NULL,
-  PRIMARY KEY (`employee_Id`),
-  CONSTRAINT `fk_employee_id` FOREIGN KEY (`employee_Id`) REFERENCES `employees` (`employee_Id`)
+  PRIMARY KEY (`payroll_Id`),
+  KEY `fk_payroll_employee` (`employee_Id`),
+  CONSTRAINT `fk_payroll_employee` FOREIGN KEY (`employee_Id`) REFERENCES `employees` (`employee_Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -127,7 +129,7 @@ CREATE TABLE `payroll_data` (
 
 LOCK TABLES `payroll_data` WRITE;
 /*!40000 ALTER TABLE `payroll_data` DISABLE KEYS */;
-INSERT INTO `payroll_data` VALUES (1,169,8,69500.00),(2,150,10,79000.00),(3,170,4,54800.00),(4,165,6,59700.00),(5,158,5,57850.00),(6,168,2,64800.00),(7,175,3,71800.00),(8,160,0,5600.00),(9,155,5,61500.00),(10,162,4,57750.00);
+INSERT INTO `payroll_data` VALUES (1,1,169,8,69500.00),(2,2,150,10,79000.00),(3,3,170,4,54800.00),(4,4,165,6,59700.00),(5,5,158,5,57850.00),(6,6,168,2,64800.00),(7,7,175,3,71800.00),(8,8,160,0,5600.00),(9,9,155,5,61500.00),(10,10,162,4,57750.00);
 /*!40000 ALTER TABLE `payroll_data` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -140,4 +142,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-04  9:31:00
+-- Dump completed on 2026-02-04 11:44:03
