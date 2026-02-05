@@ -3,7 +3,15 @@ export default {
   name: "EmployeeData",
   props: {
     employees: Array,
+    
   },
+  computed: {
+    mounted: {
+      workers() {
+      this.$store.state.employees
+    },
+  },
+},
 };
 </script>
 
@@ -11,7 +19,8 @@ export default {
   <h2>Employee Data</h2>
   <div class="container">
     <div class="card-container">
-      <div class="card" v-for="employee in employees" :key="employee.id">
+      <!-- {{ this.$store.state.employees }} -->
+      <div class="card" v-for="employee in this.$store.state.employees " :key="employee.employee_id">
         <div class="cards">
           <v-card class="mx-auto" max-width="344"></v-card>
         </div>
@@ -58,7 +67,7 @@ export default {
                 <div class="form-row">
                   <label for="employeeId"></label>
                   <b
-                    ><span id="employeeId">{{ employee.employeeId }}</span></b
+                    ><span id="employeeId">{{ employee.employee_id }}</span></b
                   >
                 </div>
               </div>

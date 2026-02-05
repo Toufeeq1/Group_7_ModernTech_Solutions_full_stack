@@ -2,6 +2,7 @@
 import EmployeeData from "../components/EmployeeData.vue";
 import { mapState } from "vuex";
 
+
 export default {
   name: "EmployeeView",
   computed: {
@@ -10,13 +11,16 @@ export default {
   components: {
     EmployeeData,
   },
+  mounted() {
+    this.$store.dispatch("setEmployees");
+  }
 };
 </script>
 
 <template>
   <div>
     <EmployeeData
-     :employees="employees"
+     :employees="employees",
      />
   </div>
 </template>

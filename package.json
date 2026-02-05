@@ -1,0 +1,26 @@
+{
+  "name": "group_7_moderntech_solutions_full_stack",
+  "version": "1.0.0",
+  "description": "readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Toufeeq1/Group_7_ModernTech_Solutions_full_stack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Toufeeq1/Group_7_ModernTech_Solutions_full_stack/issues"
+  },
+  "homepage": "https://github.com/Toufeeq1/Group_7_ModernTech_Solutions_full_stack#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mysql2": "^3.16.3"
+  }
+}

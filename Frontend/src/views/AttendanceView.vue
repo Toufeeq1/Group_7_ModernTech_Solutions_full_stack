@@ -11,9 +11,7 @@ export default {
     computed: {
         ...mapState(["attendance"]),
     },
-    mounted() {
-    this.$store.dispatch("setEmployees");
-  }
+    
 };
 </script>
 

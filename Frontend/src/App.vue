@@ -12,6 +12,11 @@ export default {
       isLoggedIn: false,
     };
   },
+  computed: {
+    mounted(){
+      this.$store.dispatch('setEmployees');
+    }
+  },
   provide() {
     return {
       setLoggedIn: (value) => {

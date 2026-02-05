@@ -6,7 +6,7 @@ import axios from 'axios'
 
 const store = createStore({
   state: {
-    employees: employeeData.employeeInformation,
+    employees: [],
     attendance: attendanceData.attendanceAndLeave,
     payroll: payrollData.payrollData,
     employeesnew: null
@@ -14,19 +14,23 @@ const store = createStore({
 
   mutations: {
     setEmployees(state, payload) {
-      state.employeesnew = payload
+      state.employees = payload
     }
   },
 
   actions: {
+    // async setEmployees({ commit }) {
+    //   try {
+    //     const res = await axios.get('http://localhost:5050/employees')
+    //     console.log(res.data.info)
+    //     commit('setEmployees', res.data.info)
+    //   } catch (error) {
+    //     console.error('Failed to fetch employees:', error)
+    //   }
+    // }
     async setEmployees({ commit }) {
-      try {
-        const res = await axios.get('http://localhost:5050/employees')
-        console.log(res.data.info)
-        commit('setEmployees', res.data.info)
-      } catch (error) {
-        console.error('Failed to fetch employees:', error)
-      }
+      const {info} = await(await fetch('http://localhost:5050/employees')).json()
+      commit('setEmployees', info)
     }
   }
 })
