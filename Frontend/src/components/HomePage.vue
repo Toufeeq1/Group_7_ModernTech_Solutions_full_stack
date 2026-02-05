@@ -5,7 +5,6 @@ export default {
     employees: Array,
     payroll: Array,
     attendance: Array,
-    employeesnew: Array
   },
   data() {
     return {

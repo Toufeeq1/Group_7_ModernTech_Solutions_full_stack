@@ -2,7 +2,6 @@
 import HomePage from "@/components/HomePage.vue";
 import { mapState } from "vuex";
 
-
 export default {
   name: "HomeView",
   components: {
@@ -10,7 +9,7 @@ export default {
   },
   computed: {
     ...mapState(["payroll", "employees", "attendance"]),
-    employeesnew() {
+    employeesapi() {
       return this.$store.state.employeesnew
     },
   },
@@ -24,9 +23,9 @@ export default {
   <div>
     <HomePage
       :payrollData="payroll"
-      :employees="employees"
+      :employees="employeesapi"
       :attendance="attendance"
-      :employeesnew="employeesnew"
+      
     />
   </div>
 </template>
