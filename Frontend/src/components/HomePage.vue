@@ -5,6 +5,7 @@ export default {
     employees: Array,
     payroll: Array,
     attendance: Array,
+    employeesnew: Array
   },
   data() {
     return {
@@ -151,6 +152,10 @@ export default {
       return d.toISOString().split("T")[0];
     },
   },
+  mounted() {
+  console.log('Static employees:', this.employees)
+  console.log('API employees:', this.employeesnew)
+}
 };
 </script>
 

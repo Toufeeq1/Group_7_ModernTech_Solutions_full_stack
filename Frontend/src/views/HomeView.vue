@@ -10,7 +10,13 @@ export default {
   },
   computed: {
     ...mapState(["payroll", "employees", "attendance"]),
+    employeesnew() {
+      return this.$store.state.employeesnew
+    },
   },
+  mounted() {
+  this.$store.dispatch('setEmployees')
+}
 };
 </script>
 
@@ -20,6 +26,7 @@ export default {
       :payrollData="payroll"
       :employees="employees"
       :attendance="attendance"
+      :employeesnew="employeesnew"
     />
   </div>
 </template>
