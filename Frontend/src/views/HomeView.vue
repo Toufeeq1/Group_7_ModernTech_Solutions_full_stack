@@ -12,9 +12,16 @@ export default {
     employeesapi() {
       return this.$store.state.employeesnew
     },
+    payrollapi() {
+      return this.$store.state.payrollnew
+    }
   },
   mounted() {
-  this.$store.dispatch('setEmployees')
+  this.$store.dispatch('setEmployees'),
+  // this.$store.dispatch('setAttendance')
+  this.$store.dispatch('setPayroll')
+  console.log('initial payroll api', this.payroll)
+
 }
 };
 </script>
@@ -22,10 +29,9 @@ export default {
 <template>
   <div>
     <HomePage
-      :payrollData="payroll"
+      :payroll="payrollapi"
       :employees="employeesapi"
       :attendance="attendance"
-      
     />
   </div>
 </template>

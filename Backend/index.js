@@ -26,7 +26,7 @@ const getAllEmployees = async () => {
 };
 
 const getBasicEmployeeInfo = async () => {
-  const [rows] = await pool.query("SELECT employee_Id, name, department, image FROM employees");
+  const [rows] = await pool.query("SELECT employee_Id AS employeeId, name, department, image FROM employees");
   return rows;
 };
 
@@ -43,7 +43,7 @@ app.get("/employees", async (req, res) => {
 
 const getPayrollDB = async () => {
   const [rows] = await pool.query(`
-    SELECT employee_Id, hoursWorked, finalSalary
+    SELECT employee_Id AS employeeId, hoursWorked, finalSalary
     FROM payroll_data
   `);
   return rows;

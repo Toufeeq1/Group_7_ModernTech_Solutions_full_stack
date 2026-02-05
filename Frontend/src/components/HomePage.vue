@@ -152,8 +152,8 @@ export default {
     },
   },
   mounted() {
-  console.log('Static employees:', this.employees)
-  console.log('API employees:', this.employeesnew)
+  console.log('comp API employees:', this.employees)
+  console.log('comp API payroll:', this.payroll)
 }
 };
 </script>
