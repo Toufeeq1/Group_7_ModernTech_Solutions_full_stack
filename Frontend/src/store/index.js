@@ -22,7 +22,6 @@ const store = createStore({
     async setEmployees({ commit }) {
       try {
         const res = await axios.get('http://localhost:5050/employees?type=home')
-        console.log(res.data)
         commit('setEmployees', res.data)
       } catch (error) {
         console.error('Failed to fetch employees:', error)

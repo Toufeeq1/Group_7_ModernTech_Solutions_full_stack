@@ -9,7 +9,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 const pool = mysql.createPool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -17,11 +16,9 @@ const pool = mysql.createPool({
   database: process.env.DB_DATABASE,
 });
 
-
 app.listen(5050, () => {
   console.log("http://localhost:5050");
 });
-
 
 const getAllEmployees = async () => {
   const [rows] = await pool.query("SELECT * FROM employees");
@@ -42,5 +39,19 @@ app.get("/employees", async (req, res) => {
     res.json(await getAllEmployees());
   }
 });
+
+
+const getPayrollDB = async () => {
+  const [rows] = await pool.query(`
+    SELECT employee_Id, hoursWorked, finalSalary
+    FROM payroll_data
+  `);
+  return rows;
+};
+
+app.get("/payroll", async (req, res) => {
+  res.json(await getPayrollDB());
+});
+
 
 
