@@ -4,7 +4,41 @@ export default {
   props: {
     employees: Array,
   },
-};
+  data() {
+    return {
+      selectedEmployee: null,
+    };
+  },
+  computed: {
+    selectedEmployeeDetails() {
+      return this.selectedEmployee
+        ? {
+            employeeId: this.selectedEmployee.employee_Id,
+            employeeName: this.selectedEmployee.name,
+            employeePosition: this.selectedEmployee.position,
+            department: this.selectedEmployee.department,
+            salary: this.selectedEmployee.salary,
+            employmentHistory: this.selectedEmployee.employmentHistory,
+            contact: this.selectedEmployee.contact,
+            employeeImage: this.selectedEmployee.image,
+          
+          }
+        : null;
+    },
+  },
+ methods: {
+    selectEmployee(employee) {
+      this.selectedEmployee = employee;
+    },
+  },
+   mounted(){
+    // Initialize show property for each employee
+    this.employees.forEach((employee) => {
+    })
+  }
+}
+
+
 </script>
 
 <template>

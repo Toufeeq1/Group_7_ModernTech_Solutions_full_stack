@@ -5,11 +5,14 @@ import { mapState } from "vuex";
 export default {
   name: "EmployeeView",
   computed: {
-    ...mapState(["employees"]),
+  ...mapState(["employees"]),
   },
   components: {
     EmployeeData,
   },
+  mounted() {
+    this.$store.dispatch("setEmployees");
+  }
 };
 </script>
 

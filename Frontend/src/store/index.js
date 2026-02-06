@@ -100,6 +100,18 @@ const store = createStore({
       }
     },
 
+    async setEmployees({ commit }) {
+      commit('setLoading', { key: 'employees', value: true })
+      try {
+        const res = await axios.get(`http://localhost:5050/employees?type=home`)
+        commit('setEmployees', res.data)
+      } catch (error) {
+        console.error('Failed to fetch employees:', error)
+        commit('setError', { key: 'employees', error: error.message })
+        throw error
+      }
+    },
+
     // ==================== PAYROLL ====================
     async setPayroll({ commit }) {
       commit('setLoading', { key: 'payroll', value: true })
@@ -304,3 +316,4 @@ const store = createStore({
 })
 
 export default store
+
