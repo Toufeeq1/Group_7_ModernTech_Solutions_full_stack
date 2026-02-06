@@ -41,9 +41,16 @@ export default {
       return this.payroll?.reduce((sum, emp) => sum + (emp.hoursWorked || 0), 0) || 0;
     },
     totalPayroll() {
-      const total = this.payroll?.reduce((sum, emp) => sum + (emp.finalSalary || 0), 0) || 0;
-      return (total / 1000).toFixed(1);
-    },
+  if (!Array.isArray(this.payroll)) return "0";
+
+  const total = this.payroll.reduce(
+    (sum, emp) => sum + Number(emp.finalSalary),
+    0
+  );
+
+  return total.toLocaleString();
+}
+,
     leaveDates() {
       const dates = [];
       this.attendance?.forEach((emp) => {
@@ -151,6 +158,10 @@ export default {
       return d.toISOString().split("T")[0];
     },
   },
+  mounted() {
+  console.log('comp API employees:', this.employees)
+  console.log('comp API payroll:', this.payroll)
+}
 };
 </script>
 
