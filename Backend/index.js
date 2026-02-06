@@ -43,7 +43,11 @@ app.get("/employees", async (req, res) => {
 
 const getPayrollDB = async () => {
   const [rows] = await pool.query(`
-    SELECT employee_Id AS employeeId, hoursWorked, finalSalary
+    SELECT 
+      employee_Id AS employeeId,
+      hoursWorked,
+      leaveDeductions,
+      CAST(finalSalary AS DECIMAL(12,2)) AS finalSalary
     FROM payroll_data
   `);
   return rows;
@@ -53,5 +57,46 @@ app.get("/payroll", async (req, res) => {
   res.json(await getPayrollDB());
 });
 
+
+const getAttendanceWithLeaves = async () => {
+  const [employees] = await pool.query("SELECT employee_Id AS employeeId FROM employees");
+
+  const [attendanceRows] = await pool.query(`
+    SELECT 
+      employee_Id AS employeeId,
+      attendance_date AS date,
+      status
+    FROM attendance
+  `);
+
+  const [leaveRows] = await pool.query(`
+    SELECT 
+      id_leave_request_employee AS employeeId,
+      leave_data AS date,
+      reason,
+      status
+    FROM leave_request
+  `);
+
+  const result = employees.map(emp => {
+    return {
+      employeeId: emp.employeeId,
+      attendance: attendanceRows.filter(a => a.employeeId === emp.employeeId),
+      leaveRequests: leaveRows.filter(lr => lr.employeeId === emp.employeeId)
+    };
+  });
+
+  return result;
+};
+
+app.get("/attendance", async (req, res) => {
+  try {
+    const data = await getAttendanceWithLeaves();
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 
