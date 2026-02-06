@@ -243,3 +243,121 @@ app.get("/employees/simple", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch employees" });
   }
 });
+
+// ==================== PAYROLL DETAILED ====================
+
+// Get full payroll data with employee info
+const getPayrollDetailedDB = async () => {
+  const [rows] = await pool.query(`
+    SELECT 
+      p.payroll_Id AS payrollId,
+      p.employee_Id AS employeeId,
+      e.name AS employeeName,
+      e.image AS employeeImage,
+      e.department,
+      e.position,
+      p.hoursWorked,
+      p.leaveDeductions,
+      p.finalSalary
+    FROM payroll_data p
+    INNER JOIN employees e ON p.employee_Id = e.employee_Id
+    ORDER BY e.name
+  `);
+  return rows;
+};
+
+app.get("/payroll/detailed", async (req, res) => {
+  try {
+    res.json(await getPayrollDetailedDB());
+  } catch (error) {
+    console.error("Error fetching detailed payroll:", error);
+    res.status(500).json({ error: "Failed to fetch detailed payroll" });
+  }
+});
+
+app.patch("/payroll/:payrollId", async (req, res) => {
+  try {
+    const { payrollId } = req.params;
+    const { hoursWorked, leaveDeductions, finalSalary } = req.body;
+
+    const updates = [];
+    const values = [];
+
+    if (hoursWorked !== undefined) {
+      updates.push("hoursWorked = ?");
+      values.push(hoursWorked);
+    }
+    if (leaveDeductions !== undefined) {
+      updates.push("leaveDeductions = ?");
+      values.push(leaveDeductions);
+    }
+    if (finalSalary !== undefined) {
+      updates.push("finalSalary = ?");
+      values.push(finalSalary);
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: "No fields to update" });
+    }
+
+    values.push(payrollId);
+
+    await pool.query(
+      `UPDATE payroll_data SET ${updates.join(", ")} WHERE payroll_Id = ?`,
+      values
+    );
+
+    res.json({ 
+      success: true, 
+      message: "Payroll updated successfully" 
+    });
+  } catch (error) {
+    console.error("Error updating payroll:", error);
+    res.status(500).json({ error: "Failed to update payroll" });
+  }
+});
+
+
+app.post("/payroll", async (req, res) => {
+  try {
+    const { employeeId, hoursWorked, leaveDeductions, finalSalary } = req.body;
+
+    if (!employeeId || hoursWorked === undefined || leaveDeductions === undefined || finalSalary === undefined) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const [result] = await pool.query(
+      `INSERT INTO payroll_data (employee_Id, hoursWorked, leaveDeductions, finalSalary)
+       VALUES (?, ?, ?, ?)`,
+      [employeeId, hoursWorked, leaveDeductions, finalSalary]
+    );
+
+    res.json({ 
+      success: true, 
+      payrollId: result.insertId,
+      message: "Payroll entry created successfully" 
+    });
+  } catch (error) {
+    console.error("Error creating payroll:", error);
+    res.status(500).json({ error: "Failed to create payroll entry" });
+  }
+});
+
+app.delete("/payroll/:payrollId", async (req, res) => {
+  try {
+    const { payrollId } = req.params;
+
+    await pool.query(
+      `DELETE FROM payroll_data WHERE payroll_Id = ?`,
+      [payrollId]
+    );
+
+    res.json({ 
+      success: true, 
+      message: "Payroll entry deleted successfully" 
+    });
+  } catch (error) {
+    console.error("Error deleting payroll:", error);
+    res.status(500).json({ error: "Failed to delete payroll entry" });
+  }
+});
