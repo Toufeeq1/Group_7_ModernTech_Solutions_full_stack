@@ -1,24 +1,27 @@
 <script>
+import ReportsData from "../components/ReportsData.vue";
 import { mapState } from "vuex";
 
-import ReportsData from "../components/ReportsData.vue";
 export default {
-  name: "ReportView",
-  components: {
-    ReportsData,
-  },
+  name: "ReportsView",
+  components: { ReportsData },
+
   computed: {
-    ...mapState(["employees", "attendance", "payroll"]),
+    ...mapState(["employeesnew", "attendancenew", "payrollDetailed"]),
+  },
+
+  mounted() {
+    this.$store.dispatch("setEmployees");
+    this.$store.dispatch("setAttendance");
+    this.$store.dispatch("fetchPayrollDetailed");
   },
 };
 </script>
 
 <template>
-  <div>
-    <ReportsData
-      :employees="employees"
-      :attendance="attendance"
-      :payroll="payroll"
-    />
-  </div>
+  <ReportsData
+    :employees="employeesnew"
+    :attendance="attendancenew"
+    :payroll="payrollDetailed"
+  />
 </template>

@@ -1,59 +1,62 @@
 <template>
   <v-container fluid class="pa-2 pa-sm-4">
     <v-row>
+      <!-- Summary cards -->
       <v-col cols="12" sm="6" md="4">
         <v-card class="pa-3 pa-sm-4" elevation="2">
-          <v-card-title class="text-subtitle-1 text-sm-h6 pa-2">Total Employees</v-card-title>
-          <v-card-text class="text-h5 text-sm-h4 font-weight-bold pa-2">{{
-            totalEmployees
-          }}</v-card-text>
+          <v-card-title>Total Employees</v-card-title>
+          <v-card-text class="text-h4 font-weight-bold">
+            {{ totalEmployees }}
+          </v-card-text>
         </v-card>
       </v-col>
+
       <v-col cols="12" sm="6" md="4">
         <v-card class="pa-3 pa-sm-4" elevation="2">
-          <v-card-title class="text-subtitle-1 text-sm-h6 pa-2">Total Hours Worked</v-card-title>
-          <v-card-text class="text-h5 text-sm-h4 font-weight-bold pa-2">{{
-            totalHoursWorked
-          }}</v-card-text>
+          <v-card-title>Total Hours Worked</v-card-title>
+          <v-card-text class="text-h4 font-weight-bold">
+            {{ totalHoursWorked }}
+          </v-card-text>
         </v-card>
       </v-col>
+
       <v-col cols="12" sm="6" md="4">
         <v-card class="pa-3 pa-sm-4" elevation="2">
-          <v-card-title class="text-subtitle-1 text-sm-h6 pa-2">Average Hours Worked</v-card-title>
-          <v-card-text class="text-h5 text-sm-h4 font-weight-bold pa-2">{{
-            averageHoursWorked
-          }}</v-card-text>
+          <v-card-title>Average Hours Worked</v-card-title>
+          <v-card-text class="text-h4 font-weight-bold">
+            {{ averageHoursWorked }}
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
 
-    <!-- Charts Row -->
-    <v-row class="mt-2 mt-sm-6">
+    <v-row class="mt-6">
+      <!-- Attendance Chart -->
       <v-col cols="12" lg="6">
-        <v-card class="pa-3 pa-sm-4" elevation="2">
-          <v-card-title class="text-subtitle-1 text-sm-h6 pa-2">Weekly Attendance</v-card-title>
-          <v-card-text style="height: 250px; position: relative" class="pa-2">
+        <v-card class="pa-4" elevation="2">
+          <v-card-title>Weekly Attendance</v-card-title>
+          <v-card-text style="height: 260px">
             <Bar
-              v-if="weeklyAttendanceChartData.labels && weeklyAttendanceChartData.labels.length"
+              v-if="weeklyAttendanceChartData.labels?.length"
               :data="weeklyAttendanceChartData"
               :options="chartOptions"
             />
-            <p v-else class="text-center text-body-2">No attendance data available.</p>
+            <p v-else class="text-center">No attendance data</p>
           </v-card-text>
         </v-card>
       </v-col>
+
+      <!-- Payroll Chart -->
       <v-col cols="12" lg="6">
-        <v-card class="pa-3 pa-sm-4" elevation="2">
-          <v-card-title class="text-subtitle-1 text-sm-h6 pa-2"
-            >Hours Worked vs Final Payroll</v-card-title
-          >
-          <v-card-text style="height: 250px; position: relative" class="pa-2">
+        <v-card class="pa-4" elevation="2">
+          <v-card-title>Hours vs Payroll</v-card-title>
+          <v-card-text style="height: 260px">
             <Line
-              v-if="payrollComparisonData.labels && payrollComparisonData.labels.length"
+              v-if="payrollComparisonData.labels?.length"
               :data="payrollComparisonData"
               :options="dualAxisChartOptions"
             />
-            <p v-else class="text-center text-body-2">No payroll data available.</p>
+            <p v-else class="text-center">No payroll data</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -90,212 +93,125 @@ ChartJS.register(
 
 export default {
   name: "ReportsData",
+
   props: {
-    employees: Array,
-    attendance: Array,
-    payroll: Array,
+    employees: { type: Array, default: () => [] },
+    attendance: { type: Array, default: () => [] },
+    payroll: { type: Array, default: () => [] },
   },
-  components: {
-    Bar,
-    // eslint-disable-next-line vue/no-reserved-component-names
-    Line,
-  },
+
+  components: { Bar, Line },
+
   data() {
     return {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            labels: {
-              font: {
-                size: window.innerWidth < 600 ? 10 : 12,
-              },
-            },
-          },
-        },
-        scales: {
-          x: {
-            ticks: {
-              font: {
-                size: window.innerWidth < 600 ? 9 : 11,
-              },
-            },
-          },
-          y: {
-            ticks: {
-              font: {
-                size: window.innerWidth < 600 ? 9 : 11,
-              },
-            },
-          },
-        },
       },
       dualAxisChartOptions: {
         responsive: true,
         maintainAspectRatio: false,
-        interaction: {
-          mode: "index",
-          intersect: false,
-        },
-        plugins: {
-          legend: {
-            labels: {
-              font: {
-                size: window.innerWidth < 600 ? 10 : 12,
-              },
-            },
-          },
-        },
+        interaction: { mode: "index", intersect: false },
         scales: {
-          y: {
-            type: "linear",
-            display: true,
-            position: "left",
-            title: {
-              display: window.innerWidth >= 600,
-              text: "Hours",
-              font: {
-                size: window.innerWidth < 600 ? 10 : 12,
-              },
-            },
-            ticks: {
-              font: {
-                size: window.innerWidth < 600 ? 9 : 11,
-              },
-            },
-          },
+          y: { type: "linear", position: "left" },
           y1: {
             type: "linear",
-            display: true,
             position: "right",
-            title: {
-              display: window.innerWidth >= 600,
-              text: "Payroll (R)",
-              font: {
-                size: window.innerWidth < 600 ? 10 : 12,
-              },
-            },
-            grid: {
-              drawOnChartArea: false,
-            },
-            ticks: {
-              font: {
-                size: window.innerWidth < 600 ? 9 : 11,
-              },
-            },
+            grid: { drawOnChartArea: false },
           },
         },
       },
     };
   },
+
   computed: {
     totalEmployees() {
-      return this.employees.length;
+      return Array.isArray(this.employees) ? this.employees.length : 0;
     },
-    presentToday() {
-      const today = new Date().toISOString().split("T")[0];
-      let presentCount = 0;
-      this.attendance.forEach((employee) => {
-        employee.attendance.forEach((record) => {
-          if (record.date === today && record.status === "Present") {
-            presentCount++;
-          }
-        });
-      });
-      return presentCount;
-    },
-    absentToday() {
-      const today = new Date().toISOString().split("T")[0];
-      let absentCount = 0;
-      this.attendance.forEach((employee) => {
-        employee.attendance.forEach((record) => {
-          if (record.date === today && record.status === "Absent") {
-            absentCount++;
-          }
-        });
-      });
-      return absentCount;
-    },
+
     totalHoursWorked() {
-      return this.payroll.reduce((sum, employee) => sum + (employee.hoursWorked || 0), 0);
+      if (!Array.isArray(this.payroll)) return 0;
+      return this.payroll.reduce(
+        (sum, e) => sum + Number(e.hoursWorked || 0),
+        0
+      );
     },
+
     averageHoursWorked() {
       const total = this.totalHoursWorked;
-      return this.employees.length > 0 ? (total / this.employees.length).toFixed(2) : 0;
+      return Array.isArray(this.employees) && this.employees.length
+        ? (total / this.employees.length).toFixed(2)
+        : 0;
     },
+
     weeklyAttendanceChartData() {
+      if (!Array.isArray(this.attendance)) return { labels: [], datasets: [] };
 
-      const allDates = new Set();
-      this.attendance.forEach((employee) => {
-        employee.attendance.forEach((record) => {
-          allDates.add(record.date);
-        });
-      });
-
-      const sortedDates = Array.from(allDates).sort();
-
-      const byDay = {};
-      sortedDates.forEach((date) => {
-        byDay[date] = { Present: 0, Absent: 0 };
-      });
-
-      this.attendance.forEach((employee) => {
-        employee.attendance.forEach((record) => {
-          if (byDay[record.date]) {
-            byDay[record.date][record.status]++;
+      const days = {};
+      this.attendance.forEach(emp => {
+        emp.attendance?.forEach(rec => {
+          if (!days[rec.date]) days[rec.date] = { Present: 0, Absent: 0 };
+          if (rec.status === "Present" || rec.status === "Absent") {
+            days[rec.date][rec.status]++;
           }
         });
       });
 
+      const labels = Object.keys(days).sort();
+
       return {
-        labels: sortedDates,
+        labels,
         datasets: [
           {
             label: "Present",
             backgroundColor: "#4e73df",
-            data: sortedDates.map((date) => byDay[date].Present),
+            borderColor: "#4e73df",
+            data: labels.map(d => days[d].Present),
           },
           {
             label: "Absent",
             backgroundColor: "#e74a3b",
-            data: sortedDates.map((date) => byDay[date].Absent),
+            borderColor: "#e74a3b",
+            data: labels.map(d => days[d].Absent),
           },
         ],
       };
     },
-    payrollComparisonData() {
-    
-      const employeeNames = [];
-      const hoursWorked = [];
-      const finalSalaries = [];
 
-      this.employees.forEach((employee) => {
-        const payrollInfo = this.payroll.find((p) => p.employeeId === employee.employeeId);
-        if (payrollInfo) {
-          employeeNames.push(employee.name);
-          hoursWorked.push(payrollInfo.hoursWorked);
-          finalSalaries.push(payrollInfo.finalSalary);
+    payrollComparisonData() {
+      if (!Array.isArray(this.employees) || !Array.isArray(this.payroll))
+        return { labels: [], datasets: [] };
+
+      const labels = [];
+      const hours = [];
+      const salary = [];
+
+      this.employees.forEach(emp => {
+        const pay = this.payroll.find(p => p.employeeId === emp.employeeId);
+        if (pay) {
+          labels.push(emp.name);
+          hours.push(Number(pay.hoursWorked || 0));
+          salary.push(Number(pay.finalSalary || 0));
         }
       });
 
       return {
-        labels: employeeNames,
+        labels,
         datasets: [
           {
             label: "Hours Worked",
+            data: hours,
             borderColor: "#4e73df",
             backgroundColor: "rgba(78, 115, 223, 0.1)",
-            data: hoursWorked,
             tension: 0.4,
             fill: true,
             yAxisID: "y",
           },
           {
             label: "Final Payroll (R)",
+            data: salary,
             borderColor: "#1cc88a",
             backgroundColor: "rgba(28, 200, 138, 0.1)",
-            data: finalSalaries,
             tension: 0.4,
             fill: true,
             yAxisID: "y1",
