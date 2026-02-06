@@ -1,12 +1,14 @@
 <script>
-import { mapState } from "vuex";
 import { jsPDF } from "jspdf";
 
 export default {
-  name: "PayrollView",
+  name: "TableList",
 
   props: {
-    payrollData: Array,
+    payrollDetailed: {
+      type: Array,
+      default: () => []
+    }
   },
 
   data() {
@@ -29,46 +31,60 @@ export default {
   },
 
   computed: {
-    ...mapState(["employees"]),
-
     itemsWithUniqueIds() {
-      return (this.employees || []).map((employee) => {
-        const payrollInfo =
-          this.payrollData?.find((p) => p.employeeId === employee.employeeId) ||
-          {};
+  return (this.payrollDetailed || []).map((item) => {
+    const hoursWorked = Number(item.hoursWorked || 160);
+    const leaveHours = Number(item.leaveDeductions || 0);
+    const finalSalary = Number(item.finalSalary || 0);
 
-        const hourlyRate = payrollInfo.hourlyRate || employee.salary / 160;
-        const baseSalary = employee.salary || 0;
-        const finalSalary = payrollInfo.finalSalary || baseSalary;
-        const leaveDays = payrollInfo.leaveDeductions || 0;
-        const leaveDeductionAmount = baseSalary - finalSalary;
-        const hoursWorked = payrollInfo.hoursWorked || 0;
+    // hours actually paid
+    const paidHours = Math.max(hoursWorked - leaveHours, 1);
 
-        return {
-          ...employee,
-          ...payrollInfo,
-          uniqueId: employee.employeeId
-            ? `emp-${employee.employeeId}`
-            : `emp-${Math.random().toString(36).substr(2, 9)}`,
-          baseSalary,
-          hourlyRate,
-          finalSalary,
-          leaveDays,
-          leaveDeductionAmount,
-          hoursWorked,
-        };
-      });
-    },
+    // correct hourly rate
+    const hourlyRate = finalSalary / paidHours;
 
-    totalPayroll() {
-      return (this.payrollData || []).reduce(
-        (sum, e) => sum + (e.finalSalary || 0),
-        0
-      );
-    },
+    // money deducted for leave
+    const leaveDeductionAmount = leaveHours * hourlyRate;
+
+    // original base salary
+    const baseSalary = finalSalary + leaveDeductionAmount;
+
+    // convert hours → days
+    const leaveDays = leaveHours / 8;
+
+    return {
+      uniqueId: `payroll-${item.payrollId}`,
+      payrollId: item.payrollId,
+      employeeId: item.employeeId,
+      name: item.employeeName,
+      image: item.employeeImage,
+      position: item.position,
+      department: item.department,
+
+      baseSalary: Math.round(baseSalary),
+      hourlyRate: hourlyRate.toFixed(2),
+      finalSalary: Math.round(finalSalary),
+
+      hoursWorked,
+      leaveDeductions: leaveHours,
+      leaveDays: leaveDays,
+
+      leaveDeductionAmount: Math.round(leaveDeductionAmount),
+    };
+  });
+}
+,
+
+  totalPayroll() {
+  return (this.payrollDetailed || []).reduce(
+    (sum, e) => sum + Number(e.finalSalary || 0),
+    0
+  );
+},
+
 
     employeesProcessed() {
-      return (this.employees || []).length;
+      return (this.payrollDetailed || []).length;
     },
 
     nextPayrollDate() {
@@ -350,7 +366,8 @@ export default {
             <div class="text-caption">Salary Calculation</div>
             <div class="text-body-2">
               (Hourly Rate x Hours Worked) - Deductions
-            </div></div>
+            </div>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -432,7 +449,8 @@ export default {
         <template #item.name="{ item }">
           <div class="d-flex align-center py-2">
             <v-avatar size="36" class="me-3" color="primary">
-              <span class="text-white font-weight-bold">
+              <v-img v-if="item.image" :src="item.image" />
+              <span v-else class="text-white font-weight-bold">
                 {{ item.name.charAt(0) }}
               </span>
             </v-avatar>

@@ -92,7 +92,7 @@
 
     <v-data-table
       :headers="leaveRequestHeaders"
-      :items="leaveRequests"
+      :items="formattedLeaveRequests"
       class="elevation-1"
       :items-per-page="5"
     >
@@ -101,19 +101,19 @@
 
           <v-chip
             small
-            :color="getRequestStatusColor(item._requestRef.status)"
+            :color="getRequestStatusColor(item.status)"
             dark
             class="mr-2"
           >
-            {{ item._requestRef.status }}
+            {{ item.status }}
           </v-chip>
 
-          <template v-if="item._requestRef.status === 'Pending'">
+          <template v-if="item.status === 'Pending'">
             <v-btn
               x-small
               color="success"
               class="mr-1"
-              @click="approveRequest(item._requestRef)"
+              @click="approveRequest(item)"
             >
               Approve
             </v-btn>
@@ -121,7 +121,7 @@
             <v-btn
               x-small
               color="error"
-              @click="rejectRequest(item._requestRef)"
+              @click="rejectRequest(item)"
             >
               Reject
             </v-btn>
@@ -136,7 +136,24 @@
 
 <script>
 export default {
-  props: ["attendanceData"],
+  props: {
+    attendanceData: {
+      type: Array,
+      default: () => []
+    },
+    leaveRequests: {
+      type: Array,
+      default: () => []
+    },
+    leaveBalance: {
+      type: Array,
+      default: () => []
+    },
+    employeesSimple: {
+      type: Array,
+      default: () => []
+    }
+  },
 
   data() {
     return {
@@ -150,11 +167,10 @@ export default {
         { text: "Employee", value: "name" },
         { text: "Date", value: "date" },
         { text: "Reason", value: "reason" },
-        { text: "Status", value: "_requestRef.status" },
+        { text: "Status", value: "status" },
         { text: "Actions", value: "actions", sortable: false }
       ],
 
-      // ⭐ Leave Application >>> FIXED
       newLeave: {
         employee: "",
         type: "",
@@ -166,28 +182,54 @@ export default {
 
   computed: {
     employeeNames() {
-      return this.attendanceData.map(e => e.name);
+      // Use API data if available, otherwise use attendanceData
+      if (this.employeesSimple && this.employeesSimple.length > 0) {
+        return this.employeesSimple.map(e => e.name);
+      }
+      return this.attendanceData?.map(e => e.name) || [];
     },
 
-    leaveRequests() {
-      return this.attendanceData.flatMap(employee =>
-        employee.leaveRequests.map(req => ({
+    formattedLeaveRequests() {
+      // Use API data if available
+      if (this.leaveRequests && this.leaveRequests.length > 0) {
+        return this.leaveRequests.map(req => ({
+          name: req.employeeName,
+          date: req.date,
+          reason: req.reason,
+          status: req.status,
+          leaveId: req.leaveId,
+          employeeId: req.employeeId,
+          image: req.employeeImage
+        }));
+      }
+      
+      // Fallback to old format from attendanceData
+      return this.attendanceData?.flatMap(employee =>
+        employee.leaveRequests?.map(req => ({
           name: employee.name,
           date: req.date,
           reason: req.reason,
+          status: req.status,
           _requestRef: req
         }))
-      );
+      ) || [];
     }
   },
 
   methods: {
     getUsedLeaveDays(type) {
-      return this.attendanceData.flatMap(employee =>
-        employee.leaveRequests.filter(
+      // Use API data if available
+      if (this.leaveBalance && this.leaveBalance.length > 0) {
+        const balance = this.leaveBalance.find(b => b.leaveType === type);
+        return balance?.usedDays || 0;
+      }
+      
+      // Fallback to calculating from attendanceData
+      return this.attendanceData?.flatMap(employee =>
+        employee.leaveRequests?.filter(
           request => request.reason === type && request.status === "Approved"
-        )
-      ).length;
+        ) || []
+      ).length || 0;
     },
 
     getRequestStatusColor(status) {
@@ -197,17 +239,47 @@ export default {
       return "gray";
     },
 
-    approveRequest(request) {
-      request.status = "Approved";
+    async approveRequest(item) {
+      // If we have leaveId (API data), use the store action
+      if (item.leaveId) {
+        try {
+          await this.$store.dispatch('updateLeaveStatus', {
+            leaveId: item.leaveId,
+            status: 'Approved'
+          });
+          alert('Leave request approved!');
+        } catch (error) {
+          console.error('Failed to approve request:', error);
+          alert('Failed to approve request');
+        }
+      } else {
+        // Old method for JSON data
+        item._requestRef.status = "Approved";
+      }
     },
 
-    rejectRequest(request) {
-      request.status = "Denied";
+    async rejectRequest(item) {
+      // If we have leaveId (API data), use the store action
+      if (item.leaveId) {
+        try {
+          await this.$store.dispatch('updateLeaveStatus', {
+            leaveId: item.leaveId,
+            status: 'Denied'
+          });
+          alert('Leave request denied!');
+        } catch (error) {
+          console.error('Failed to deny request:', error);
+          alert('Failed to deny request');
+        }
+      } else {
+        // Old method for JSON data
+        item._requestRef.status = "Denied";
+      }
     },
 
-    // ⭐ Working Leave Submission
-    submitLeave() {
-      const employee = this.attendanceData.find(
+    async submitLeave() {
+      // Find employee from API data
+      const employee = this.employeesSimple?.find(
         e => e.name === this.newLeave.employee
       );
 
@@ -216,20 +288,27 @@ export default {
         return;
       }
 
-      employee.leaveRequests.push({
-        date: `${this.newLeave.startDate} → ${this.newLeave.endDate}`,
-        reason: this.newLeave.type,
-        status: "Pending"
-      });
+      try {
+        await this.$store.dispatch('createLeaveRequest', {
+          employeeId: employee.employeeId,
+          startDate: this.newLeave.startDate,
+          endDate: this.newLeave.endDate,
+          reason: this.newLeave.type
+        });
 
-      this.newLeave = {
-        employee: "",
-        type: "",
-        startDate: "",
-        endDate: ""
-      };
+        // Reset form
+        this.newLeave = {
+          employee: "",
+          type: "",
+          startDate: "",
+          endDate: ""
+        };
 
-      alert("Leave booked successfully!");
+        alert("Leave booked successfully!");
+      } catch (error) {
+        console.error('Failed to submit leave:', error);
+        alert("Failed to submit leave request");
+      }
     }
   }
 };
