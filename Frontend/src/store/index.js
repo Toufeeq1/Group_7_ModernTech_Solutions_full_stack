@@ -4,8 +4,6 @@ import attendanceData from '@/assets/data/attendance.json'
 import payrollData from '@/assets/data/payroll_data.json'
 import axios from 'axios'
 
-
-
 const store = createStore({
   state: {
     // Fallback JSON data
@@ -22,6 +20,9 @@ const store = createStore({
     leaveRequests: null,
     leaveBalance: null,
     employeesSimple: null,
+    
+    // Payroll detailed data
+    payrollDetailed: null,
     
     // Loading states
     loading: {
@@ -71,6 +72,11 @@ const store = createStore({
     setEmployeesSimple(state, payload) {
       state.employeesSimple = payload
     },
+    setPayrollDetailed(state, payload) {
+      state.payrollDetailed = payload
+      state.loading.payroll = false
+      state.errors.payroll = null
+    },
     setLoading(state, { key, value }) {
       state.loading[key] = value
     },
@@ -103,6 +109,52 @@ const store = createStore({
       } catch (error) {
         console.error('Failed to fetch payroll:', error)
         commit('setError', { key: 'payroll', error: error.message })
+        throw error
+      }
+    },
+
+    async fetchPayrollDetailed({ commit }) {
+      commit('setLoading', { key: 'payroll', value: true })
+      try {
+        const res = await axios.get(`http://localhost:5050/payroll/detailed`)
+        console.log('Payroll detailed API response:', res.data)
+        commit('setPayrollDetailed', res.data)
+      } catch (error) {
+        console.error('Failed to fetch detailed payroll:', error)
+        commit('setError', { key: 'payroll', error: error.message })
+        throw error
+      }
+    },
+
+    async updatePayrollEntry({ dispatch }, { payrollId, data }) {
+      try {
+        const res = await axios.patch(`http://localhost:5050/payroll/${payrollId}`, data)
+        await dispatch('fetchPayrollDetailed')
+        return res.data
+      } catch (error) {
+        console.error('Failed to update payroll:', error)
+        throw error
+      }
+    },
+
+    async createPayrollEntry({ dispatch }, payrollData) {
+      try {
+        const res = await axios.post(`http://localhost:5050/payroll`, payrollData)
+        await dispatch('fetchPayrollDetailed')
+        return res.data
+      } catch (error) {
+        console.error('Failed to create payroll:', error)
+        throw error
+      }
+    },
+
+    async deletePayrollEntry({ dispatch }, payrollId) {
+      try {
+        const res = await axios.delete(`http://localhost:5050/payroll/${payrollId}`)
+        await dispatch('fetchPayrollDetailed')
+        return res.data
+      } catch (error) {
+        console.error('Failed to delete payroll:', error)
         throw error
       }
     },
@@ -158,7 +210,6 @@ const store = createStore({
     async createLeaveRequest({ dispatch }, leaveData) {
       try {
         const res = await axios.post(`http://localhost:5050/leave-requests`, leaveData)
-        // Refresh leave data after creating
         await Promise.all([
           dispatch('fetchLeaveRequests'),
           dispatch('fetchLeaveBalance')
@@ -173,7 +224,6 @@ const store = createStore({
     async updateLeaveStatus({ dispatch }, { leaveId, status }) {
       try {
         const res = await axios.patch(`http://localhost:5050/leave-requests/${leaveId}`, { status })
-        // Refresh leave data after updating
         await Promise.all([
           dispatch('fetchLeaveRequests'),
           dispatch('fetchLeaveBalance')
@@ -245,6 +295,10 @@ const store = createStore({
 
     employeesSimpleList: (state) => {
       return state.employeesSimple || []
+    },
+
+    payrollDetailedList: (state) => {
+      return state.payrollDetailed || []
     }
   }
 })
