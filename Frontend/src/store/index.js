@@ -9,12 +9,17 @@ const store = createStore({
     employees: employeeData.employeeInformation,
     attendance: attendanceData.attendanceAndLeave,
     payroll: payrollData.payrollData,
-    employeesnew: null
+    employeesnew: null,
+    attendancenew: null
   },
 
   mutations: {
     setEmployees(state, payload) {
       state.employeesnew = payload
+    },
+
+    setAttendance(state, payload) {
+      state.attendancenew = payload
     }
   },
 
@@ -26,6 +31,16 @@ const store = createStore({
         commit('setEmployees', res.data.info)
       } catch (error) {
         console.error('Failed to fetch employees:', error)
+      }
+    },
+
+    async setAttendance({ commit }) {
+      try {
+        const res = await axios.get('http://localhost:5050/attendance')
+        console.log(res.data.info)
+        commit('setAttendance', res.data.info)
+      } catch (error) {
+        console.error('Failed to fetch attendance:', error);
       }
     }
   }

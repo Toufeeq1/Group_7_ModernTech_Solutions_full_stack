@@ -10,6 +10,9 @@ export default {
   },
   computed: {
     ...mapState(["payroll", "employees", "attendance"]),
+    attendanceapi() {
+      return this.$store.state.attendancenew 
+    }
   },
 };
 </script>
