@@ -1,6 +1,6 @@
 <script>
-import { mapState } from "vuex";
 import TableList from "../components/TableList.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "PayrollView",
@@ -8,16 +8,18 @@ export default {
     TableList,
   },
   computed: {
-    ...mapState(["payroll", "employees"]),
+    ...mapState(["payrollDetailed"])
   },
+  mounted() {
+    this.$store.dispatch('fetchPayrollDetailed')
+  }
 };
 </script>
 
 <template>
   <div>
     <TableList
-      :payrollData="payroll"
-      :employees="employees"
+      :payrollDetailed="payrollDetailed"
     />
   </div>
 </template>
