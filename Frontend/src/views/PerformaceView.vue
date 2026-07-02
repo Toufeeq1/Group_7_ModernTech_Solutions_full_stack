@@ -10,6 +10,9 @@ export default {
   computed: {
     ...mapState(["employees"]),
   },
+  mounted() {
+    this.$store.dispatch('setEmployees');
+  }
 };
 </script>
 

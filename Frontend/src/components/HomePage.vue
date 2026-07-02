@@ -98,10 +98,13 @@ export default {
     },
     pendingLeaves() {
       const pending = [];
-
+      console.log(this.attendance); 
+      console.log(this.employees);  
       this.attendance?.forEach((emp) => {
-        const employee = this.employees?.find((e) => e.employeeId === emp.employeeId);
-        emp.leaveRequests?.forEach((request) => {
+        const employee = this.employees?.find((e) => e.employeeId === emp.employee_Id);
+        console.log(employee);  
+        
+        emp?.forEach((request) => {
           if (request.status === "Pending") {
             pending.push({
               employeeId: emp.employeeId,
@@ -112,6 +115,17 @@ export default {
             });
           }
         });
+        // emp.leaveRequests?.forEach((request) => {
+        //   if (request.status === "Pending") {
+        //     pending.push({
+        //       employeeId: emp.employeeId,
+        //       name: employee?.name || "Unknown",
+        //       image: employee?.image || "",
+        //       reason: request.reason,
+        //       date: request.date,
+        //     });
+        //   }
+        // });
       });
 
       return pending;
@@ -183,7 +197,6 @@ export default {
         </div>
       </v-card-text>
     </v-card>
-
     <v-row class="mb-6">
       <v-col cols="12" sm="6" md="4">
         <v-card elevation="2" class="pa-4">
@@ -284,6 +297,7 @@ export default {
       <v-col cols="12" lg="3">
         <v-card elevation="2" height="100%">
           <v-card-title>Pending Leave Requests</v-card-title>
+          {{ pendingLeaves }}
           <v-divider></v-divider>
           <v-card-text class="pa-0">
             <v-list v-if="pendingLeaves.length > 0">

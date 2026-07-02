@@ -10,6 +10,9 @@ export default {
   components: {
     EmployeeData,
   },
+  mounted() {
+    this.$store.dispatch('setEmployees');
+  }
 };
 </script>
 

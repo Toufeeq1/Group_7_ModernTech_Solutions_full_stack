@@ -20,11 +20,10 @@ export default {
     }
   },
   mounted() {
-  this.$store.dispatch('setEmployees'),
-  this.$store.dispatch('setAttendance')
-  this.$store.dispatch('setPayroll')
-
-}
+    this.$store.dispatch('setEmployees');
+    this.$store.dispatch('setAttendance');
+    this.$store.dispatch('setPayroll');
+  }
 };
 </script>
 

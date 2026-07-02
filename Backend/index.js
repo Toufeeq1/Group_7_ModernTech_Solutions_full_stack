@@ -76,20 +76,30 @@ app.listen(5050, () => {
    EMPLOYEES
 ========================= */
 const getAllEmployees = async () => {
-  const [rows] = await pool.query("SELECT * FROM employees");
-  return rows;
+  try {
+    const [rows] = await pool.query("SELECT * FROM employees");
+    return rows;
+  } catch (err) {
+    console.error('getAllEmployees DB error:', err);
+    return []; // return empty array on DB error to avoid throwing 500
+  }
 };
 
 const getBasicEmployeeInfo = async () => {
-  const [rows] = await pool.query(`
-    SELECT 
-      employee_Id AS employeeId,
-      name,
-      department,
-      image
-    FROM employees
-  `);
-  return rows;
+  try {
+    const [rows] = await pool.query(`
+      SELECT 
+        employee_Id AS employeeId,
+        name,
+        department,
+        image
+      FROM employees
+    `);
+    return rows;
+  } catch (err) {
+    console.error('getBasicEmployeeInfo DB error:', err);
+    return [];
+  }
 };
 
 app.get("/employees", async (req, res) => {
