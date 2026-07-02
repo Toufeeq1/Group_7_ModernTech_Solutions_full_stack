@@ -92,7 +92,7 @@ const store = createStore({
       commit('setLoading', { key: 'employees', value: true })
       try {
         const res = await axios.get(`http://localhost:5050/employees?type=home`)
-        commit('setEmployees', res.data)
+        commit('setEmployees', res.data.info || res.data.data || res.data)
       } catch (error) {
         console.error('Failed to fetch employees:', error)
         commit('setError', { key: 'employees', error: error.message })
@@ -117,7 +117,7 @@ const store = createStore({
       commit('setLoading', { key: 'payroll', value: true })
       try {
         const res = await axios.get(`http://localhost:5050/payroll`)
-        commit('setPayroll', res.data)
+        commit('setPayroll', res.data.data || res.data)
       } catch (error) {
         console.error('Failed to fetch payroll:', error)
         commit('setError', { key: 'payroll', error: error.message })
@@ -176,7 +176,7 @@ const store = createStore({
       commit('setLoading', { key: 'attendance', value: true })
       try {
         const res = await axios.get(`http://localhost:5050/attendance`)
-        commit('setAttendance', res.data)
+        commit('setAttendance', res.data.data || res.data)
       } catch (error) {
         console.error('Failed to fetch attendance:', error)
         commit('setError', { key: 'attendance', error: error.message })

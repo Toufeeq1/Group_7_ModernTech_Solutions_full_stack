@@ -1,22 +1,26 @@
 <script>
-import { mapState } from 'vuex';
 import Present from "../components/Present.vue";
 
-
 export default {
-    name: "AttendanceView",
-    components: {
-        Present,
-    },
-    computed: {
-        ...mapState(["attendance"]),
-    },
-    mounted() {
+  name: "AttendanceView",
+  components: {
+    Present,
+  },
+
+  computed: {
+    attendance() {
+      return this.$store.state.attendancenew
+        ? this.$store.state.attendancenew
+        : this.$store.state.attendance
+    }
+  },
+
+  mounted() {
     this.$store.dispatch("setEmployees");
+    this.$store.dispatch("setAttendance");
   }
 };
 </script>
-
 
 <template>
   <div>

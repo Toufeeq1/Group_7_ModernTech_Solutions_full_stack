@@ -15,6 +15,11 @@ export default {
     this.$store.dispatch("setAttendance");
     this.$store.dispatch("fetchPayrollDetailed");
   },
+  mounted() {
+    this.$store.dispatch('setEmployees');
+    this.$store.dispatch('setAttendance');
+    this.$store.dispatch('setPayroll');
+  }
 };
 </script>
 
